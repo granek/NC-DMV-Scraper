@@ -15,6 +15,7 @@ from geopy.geocoders import Nominatim
 from decimal import Decimal
 from datetime import datetime, timedelta, time as dt_time, date
 import calendar
+import csv
 
 # --- Configuration ---
 
@@ -496,8 +497,20 @@ if YOUR_DISCORD_WEBHOOK_URL == "YOUR_WEBHOOK_URL_HERE":
     print("!!! WARNING: DISCORD WEBHOOK URL IS NOT SET. Notifications will be skipped. !!!")
     print("!!! Edit the YOUR_DISCORD_WEBHOOK_URL variable in the script. !!!")
 
+
+
+start_time = datetime.now()
+logfile_path=os.path.join("/tmp",start_time.strftime("dmvlog__%Y_%m_%d_%H_%M.csv"))
+print("logging to:", logfile_path)
+with open(logfile_path, 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(["location","appointment_time","scrape_time"])
+
 while True:
-    print(f"\n--- Starting run at {time.strftime('%Y-%m-%d %H:%M:%S')} ---")
+    iteration_time = datetime.now()
+    formatted_iteration_time = iteration_time.strftime("%m/%d/%Y %H:%M")
+
+    print(f"\n--- Starting run at {iteration_time.strftime('%Y-%m-%d %H:%M:%S')} ---")
 
     results = extract_times_for_all_locations_firefox(
         NCDOT_APPOINTMENT_URL,
@@ -519,6 +532,13 @@ while True:
         send_discord_notification(YOUR_DISCORD_WEBHOOK_URL, discord_message_content)
     else:
         print("No valid appointment times found in this run.")
+
+    with open(logfile_path, 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        for key, value in results.items():
+            if (value!='Dropdown Disabled'):
+                for appointment in value:
+                    writer.writerow([key,appointment,formatted_iteration_time])
 
     base_sleep = BASE_INTERVAL_MINUTES * 60
     random_delay = random.randint(MIN_RANDOM_DELAY_SECONDS, MAX_RANDOM_DELAY_SECONDS)
