@@ -498,11 +498,11 @@ if YOUR_DISCORD_WEBHOOK_URL == "YOUR_WEBHOOK_URL_HERE":
     print("!!! Edit the YOUR_DISCORD_WEBHOOK_URL variable in the script. !!!")
 
 
-
+csvdir="/mnt"
 start_time = datetime.now()
-logfile_path=os.path.join("/tmp",start_time.strftime("dmvlog__%Y_%m_%d_%H_%M.csv"))
-print("logging to:", logfile_path)
-with open(logfile_path, 'w', newline='') as csvfile:
+csvfile_path=os.path.join(csvdir,start_time.strftime("dmvappts__%Y_%m_%d_%H_%M.csv"))
+print("writing table to:", csvfile_path)
+with open(csvfile_path, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(["location","appointment_time","scrape_time"])
 
@@ -533,7 +533,7 @@ while True:
     else:
         print("No valid appointment times found in this run.")
 
-    with open(logfile_path, 'a', newline='') as csvfile:
+    with open(csvfile_path, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         for key, value in results.items():
             if (value!='Dropdown Disabled'):
