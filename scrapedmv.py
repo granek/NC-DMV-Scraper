@@ -16,6 +16,8 @@ from decimal import Decimal
 from datetime import datetime, timedelta, time as dt_time, date
 import calendar
 import csv
+import zoneinfo
+
 
 # --- Configuration ---
 
@@ -499,7 +501,8 @@ if YOUR_DISCORD_WEBHOOK_URL == "YOUR_WEBHOOK_URL_HERE":
 
 
 csvdir="/mnt"
-start_time = datetime.now()
+local_tz=zoneinfo.ZoneInfo("America/New_York")
+start_time = datetime.now(tz=local_tz)
 csvfile_path=os.path.join(csvdir,start_time.strftime("dmvappts__%Y_%m_%d_%H_%M.csv"))
 print("writing table to:", csvfile_path)
 with open(csvfile_path, 'w', newline='') as csvfile:
@@ -507,10 +510,10 @@ with open(csvfile_path, 'w', newline='') as csvfile:
     writer.writerow(["location","appointment_time","scrape_time"])
 
 while True:
-    iteration_time = datetime.now()
-    formatted_iteration_time = iteration_time.strftime("%m/%d/%Y %H:%M")
+    iteration_time = datetime.now(tz=local_tz)
+    formatted_iteration_time = iteration_time.strftime("%m/%d/%Y %H:%M %Z")
 
-    print(f"\n--- Starting run at {iteration_time.strftime('%Y-%m-%d %H:%M:%S')} ---")
+    print(f"\n--- Starting run at {formatted_iteration_time} ---")
 
     results = extract_times_for_all_locations_firefox(
         NCDOT_APPOINTMENT_URL,
