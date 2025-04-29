@@ -539,7 +539,7 @@ while True:
     with open(csvfile_path, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         for key, value in results.items():
-            if not isinstance(value, str)): # catch 'Dropdown Disabled' and "Error processing location"
+            if not isinstance(value, str): # catch 'Dropdown Disabled' and "Error processing location"
                 for appointment in value:
                     writer.writerow([key,appointment,formatted_iteration_time])
 
