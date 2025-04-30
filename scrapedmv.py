@@ -503,7 +503,7 @@ if YOUR_DISCORD_WEBHOOK_URL == "YOUR_WEBHOOK_URL_HERE":
 csvdir="/mnt"
 local_tz=zoneinfo.ZoneInfo("America/New_York")
 start_time = datetime.now(tz=local_tz)
-csvfile_path=os.path.join(csvdir,start_time.strftime("dmvappts__%Y_%m_%d_%H_%M.csv"))
+csvfile_path=os.path.join(csvdir,start_time.strftime("dmvappts__%Y%m%d_%H%M.csv"))
 print("writing table to:", csvfile_path)
 with open(csvfile_path, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
