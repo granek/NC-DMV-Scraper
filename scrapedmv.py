@@ -547,7 +547,10 @@ while True:
     random_delay = random.randint(MIN_RANDOM_DELAY_SECONDS, MAX_RANDOM_DELAY_SECONDS)
     total_sleep = base_sleep + random_delay
 
-    print(f"--- Run finished. Sleeping for {total_sleep // 60} minutes and {total_sleep % 60} seconds ---")
+
+    stop_time = datetime.now(tz=local_tz)                                                                                                                                                                                       
+    formatted_stop_time = iteration_time.strftime("%m/%d/%Y %H:%M %Z")                                                                                                                                                              
+    print(f"--- Run finished at {formatted_stop_time} . Sleeping for {total_sleep // 60} minutes and {total_sleep % 60} seconds ---")
     try:
         time.sleep(total_sleep)
     except KeyboardInterrupt:
